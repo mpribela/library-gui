@@ -1,9 +1,9 @@
 import Header from "../components/Header";
-import BookRecord from "../components/BookRecord";
-import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../lib/api";
 import type { BookListDto } from "../lib/types";
+import { Link } from "@tanstack/react-router";
+import BookRecord from "../components/BookRecord";
 
 export default function MainPage() {
   const { data, isSuccess, isError } = useQuery<BookListDto>({
@@ -20,7 +20,7 @@ export default function MainPage() {
         <ul>
           {isSuccess &&
             data.books.map((book) => (
-              <Link to={`/${book.ISBN}`} id={book.ISBN}>
+              <Link to="/$isbn" params={{ isbn: book.ISBN }}>
                 <li>
                   <BookRecord book={book} />
                 </li>

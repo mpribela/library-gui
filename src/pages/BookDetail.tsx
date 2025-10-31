@@ -1,14 +1,14 @@
-import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import type { BookDto } from "../lib/types";
 import { api } from "../lib/api";
+import { useParams } from "@tanstack/react-router";
 
 export default function BookDetail() {
-  const { ISBN } = useParams();
+  const { isbn } = useParams({ from: "/$isbn" });
   const { data, isSuccess } = useQuery<BookDto>({
-    queryKey: [ISBN],
+    queryKey: [isbn],
     queryFn: async () => {
-      const response = await fetch(api.getBook(ISBN!));
+      const response = await fetch(api.getBook(isbn));
       return response.json();
     },
   });
@@ -23,11 +23,8 @@ export default function BookDetail() {
           <button className="border-1 p-1 m-1">Borrow</button>
         </p>
       ) : null}
-      <Link to="/" className="border-1 p-1 m-1">
-        Back to list
-      </Link>
     </section>
   ) : (
-    <p>Could not find the book with ISBN {ISBN}</p>
+    <p>Could not find the book with ISBN {isbn}</p>
   );
 }
