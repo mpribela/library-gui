@@ -1,7 +1,7 @@
-import type { Book } from "../lib/types";
+import type { BookDto } from "../lib/types";
 
 export interface BookProps {
-  book: Book;
+  book: BookDto;
 }
 
 export default function BookRecord({ book }: BookProps) {

@@ -1,17 +1,24 @@
 import { Link, useParams } from "react-router-dom";
-import { useLibraryContext } from "../lib/hooks";
+import { useQuery } from "@tanstack/react-query";
+import type { BookDto } from "../lib/types";
+import { api } from "../lib/api";
 
 export default function BookDetail() {
   const { ISBN } = useParams();
-  const { books } = useLibraryContext();
-  const bookDetail = books.filter((book) => book.ISBN === ISBN)[0];
+  const { data, isSuccess } = useQuery<BookDto>({
+    queryKey: [ISBN],
+    queryFn: async () => {
+      const response = await fetch(api.getBook(ISBN!));
+      return response.json();
+    },
+  });
 
-  return bookDetail ? (
+  return isSuccess ? (
     <section>
-      <h1>{bookDetail.title}</h1>
-      <h2>Author: {bookDetail.author}</h2>
-      <h2>Available copies: {bookDetail.availableCopies}</h2>
-      {bookDetail.availableCopies > 0 ? (
+      <h1>{data.title}</h1>
+      <h2>Author: {data.author}</h2>
+      <h2>Available copies: {data.availableCopies}</h2>
+      {data.availableCopies > 0 ? (
         <p>
           <button className="border-1 p-1 m-1">Borrow</button>
         </p>
