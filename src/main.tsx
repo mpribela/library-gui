@@ -1,8 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-// import LibraryContextProvider from "./contexts/LibraryContextProvider.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
@@ -19,10 +19,19 @@ declare module "@tanstack/react-router" {
   }
 }
 
+const theme = createTheme({
+  typography: {
+    fontFamily: ["Roboto", "sans-serif"].join(","),
+  },
+  palette: {},
+});
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <ThemeProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </ThemeProvider>
   </StrictMode>
 );

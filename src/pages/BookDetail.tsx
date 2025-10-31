@@ -9,6 +9,7 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import React from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function getBookDetail(book: BookDto) {
   return (
@@ -27,11 +28,11 @@ function getBookDetail(book: BookDto) {
             </Typography>
             <Typography variant="body2">{book.author}</Typography>
           </CardContent>
-          {book.availableCopies > 0 && (
-            <CardActions>
-              <Button size="small">Borrow</Button>
-            </CardActions>
-          )}
+          <CardActions>
+            <Button size="small" disabled={book.availableCopies > 0}>
+              Borrow
+            </Button>
+          </CardActions>
         </React.Fragment>
       </Card>
     </Box>
@@ -40,7 +41,7 @@ function getBookDetail(book: BookDto) {
 
 function getEmptyDetail() {
   return (
-    <Box sx={{ minWidth: 275 }}>
+    <Box sx={{ maxWidth: 700 }}>
       <Card variant="outlined">
         <React.Fragment>
           <CardContent>
@@ -60,9 +61,29 @@ function getEmptyDetail() {
   );
 }
 
+function getLoadingDetail() {
+  return (
+    <Box sx={{ maxWidth: 700 }}>
+      <Card variant="outlined">
+        <React.Fragment>
+          <CardContent>
+            <Typography
+              gutterBottom
+              sx={{ color: "text.secondary", fontSize: 14 }}
+            >
+              Book detail
+            </Typography>
+            <CircularProgress />
+          </CardContent>
+        </React.Fragment>
+      </Card>
+    </Box>
+  );
+}
+
 export default function BookDetail() {
   const { isbn } = useParams({ from: "/$isbn" });
-  const { data, isSuccess } = useQuery<BookDto>({
+  const { data, isSuccess, isLoading } = useQuery<BookDto>({
     queryKey: [isbn],
     queryFn: async () => {
       const response = await fetch(api.getBook(isbn));
@@ -70,5 +91,9 @@ export default function BookDetail() {
     },
   });
 
-  return isSuccess ? getBookDetail(data) : getEmptyDetail();
+  return isLoading
+    ? getLoadingDetail()
+    : isSuccess
+      ? getBookDetail(data)
+      : getEmptyDetail();
 }

@@ -1,7 +1,12 @@
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+
 export default function Header() {
   return (
-    <header>
-      <h1>Library</h1>
-    </header>
+    <CardContent>
+      <Typography variant="h3" component="div">
+        Library
+      </Typography>
+    </CardContent>
   );
 }

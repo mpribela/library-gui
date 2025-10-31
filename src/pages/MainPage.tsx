@@ -1,17 +1,11 @@
 import Header from "../components/Header";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../lib/api";
-import type { BookListDto } from "../lib/types";
+import type { BookListDto, TableBookDefinition } from "../lib/types";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
-import { Link } from "@tanstack/react-router";
-
-type TableBookDefinition = {
-  id: string;
-  author: string;
-  title: string;
-};
+import { useNavigate } from "@tanstack/react-router";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ISBN", width: 200 },
@@ -20,15 +14,11 @@ const columns: GridColDef[] = [
     field: "title",
     headerName: "Title",
     width: 1000,
-    renderCell: (param) => (
-      <Link key={param.id} to="/$isbn" params={{ isbn: param.id.toString() }}>
-        {param.value}
-      </Link>
-    ),
   },
 ];
 
 export default function MainPage() {
+  const navigate = useNavigate();
   const [rows, setRows] = useState<TableBookDefinition[]>([]);
   const { data, isSuccess } = useQuery<BookListDto>({
     queryKey: ["books"],
@@ -63,6 +53,12 @@ export default function MainPage() {
             columns={columns}
             pageSizeOptions={[5, 10]}
             sx={{ border: 0 }}
+            onRowClick={(param) => {
+              navigate({
+                to: "/$isbn",
+                params: { isbn: param.id.toString() },
+              });
+            }}
           />
         </Paper>
       </main>

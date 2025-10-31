@@ -9,3 +9,9 @@ export type BookDto = {
 export type BookListDto = {
   books: BookDto[];
 };
+
+export type TableBookDefinition = {
+  id: string;
+  author: string;
+  title: string;
+};
