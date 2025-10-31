@@ -20,7 +20,7 @@ export default function MainPage() {
         <ul>
           {isSuccess &&
             data.books.map((book) => (
-              <Link to="/$isbn" params={{ isbn: book.ISBN }}>
+              <Link key={book.ISBN} to="/$isbn" params={{ isbn: book.ISBN }}>
                 <li>
                   <BookRecord book={book} />
                 </li>
